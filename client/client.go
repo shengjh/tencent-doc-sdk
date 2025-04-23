@@ -18,6 +18,7 @@ type TencentDocClient interface {
 	// 文档操作
 	ListDocuments(ctx context.Context, params *model.ListParams) (*model.ListDocumentsResponse, error)
 	SearchDocuments(ctx context.Context, params *model.SearchParams) (*model.SearchDocumentsResponse, error)
+	GetFileMetadata(ctx context.Context, fileID string) (*model.FileMetadataResponse, error)
 
 	// 导出相关
 	ExportDocument(ctx context.Context, docID string, req *model.ExportRequest) (*model.ExportResponse, error)
