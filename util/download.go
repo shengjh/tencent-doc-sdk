@@ -11,10 +11,31 @@ import (
 	"strings"
 )
 
-// DownloadFromCOS 从腾讯云COS下载文件到指定目录
-// fileURL: 文件URL地址
-// saveDir: 保存目录（为空则保存到当前目录）
-// 返回: 下载文件的完整路径和错误信息
+// DownloadFromCOS 从腾讯云 COS（对象存储）下载文件到本地指定目录。
+//
+// 参数:
+//   - fileURL: 文件的完整 URL 地址，指向腾讯云 COS 上的资源。
+//   - saveDir: 文件保存的本地目录路径。如果为空，则默认保存到当前工作目录。
+//
+// 返回值:
+//   - string: 下载文件的完整本地路径。
+//   - error: 如果下载过程中发生错误，返回具体的错误信息；否则返回 nil。
+//
+// 示例:
+//
+//	filePath, err := DownloadFromCOS("https://example.com/file.txt", "./downloads")
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Println("文件已下载到:", filePath)
+//
+// 功能说明:
+//  1. 发起 HTTP GET 请求下载文件。
+//  2. 检查响应状态码，确保请求成功。
+//  3. 从响应头中提取文件名。
+//  4. 创建本地目录（如果不存在）。
+//  5. 将文件流式写入本地路径。
+//  6. 返回下载文件的完整路径。
 func DownloadFromCOS(fileURL, saveDir string) (string, error) {
 	resp, err := http.Get(fileURL)
 	if err != nil {

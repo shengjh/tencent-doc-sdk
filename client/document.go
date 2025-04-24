@@ -10,10 +10,25 @@ import (
 	"github.com/chinahtl/tencent-doc-sdk/util"
 )
 
-// ListDocuments 获取文档列表
-/*
-  指引地址：https://docs.qq.com/open/document/app/openapi/v2/file/filter/filter.html
-*/
+// ListDocuments 获取腾讯文档列表。
+//
+// params 包含以下字段：
+//   - ListType: 列表类型，默认为folder（文件夹）
+//   - SortType: 排序类型，默认为browse（浏览）
+//   - Asc: 是否升序排序
+//   - FolderID: 文件夹ID，默认为根目录"/"
+//   - Start: 起始位置
+//   - Limit: 每页数量，默认20，最大20
+//   - IsOwner: 是否仅显示自己创建的文档
+//   - FileType: 文件类型过滤（可选）
+//
+// 返回文档列表响应，包含文档信息列表及相关元数据。
+// 如果发生错误，可能的错误类型包括：
+//   - access token未设置
+//   - API调用失败
+//   - 服务端返回错误
+//
+// API参考：https://docs.qq.com/open/document/app/openapi/v2/file/filter/filter.html
 func (c *Client) ListDocuments(ctx context.Context, params *model.ListParams) (*model.ListDocumentsResponse, error) {
 	if c.token == nil || c.token.AccessToken == "" {
 		return nil, fmt.Errorf("access token is required")
@@ -80,10 +95,26 @@ func (c *Client) ListDocuments(ctx context.Context, params *model.ListParams) (*
 	return &result, nil
 }
 
-// SearchDocuments 搜索文档
-/*
-  指引地址：https://docs.qq.com/open/document/app/openapi/v2/file/search/search.html
-*/
+// SearchDocuments 在腾讯文档中搜索文档。
+//
+// params 包含以下字段：
+//   - SearchType: 搜索类型
+//   - SearchKey: 搜索关键词
+//   - FolderID: 文件夹ID
+//   - ByOwnership: 是否按所有权搜索
+//   - Offset: 分页起始位置
+//   - Size: 每页数量
+//   - FileTypes: 文件类型过滤（可选）
+//   - SortType: 排序类型（可选）
+//   - Asc: 是否升序排序（可选）
+//
+// 返回搜索结果响应，包含匹配的文档列表及相关元数据。
+// 如果发生错误，可能的错误类型包括：
+//   - access token未设置
+//   - API调用失败
+//   - 服务端返回错误
+//
+// API参考：https://docs.qq.com/open/document/app/openapi/v2/file/search/search.html
 func (c *Client) SearchDocuments(ctx context.Context, params *model.SearchParams) (*model.SearchDocumentsResponse, error) {
 	if c.token == nil || c.token.AccessToken == "" {
 		return nil, fmt.Errorf("access token is required")
@@ -140,10 +171,24 @@ func (c *Client) SearchDocuments(ctx context.Context, params *model.SearchParams
 	return &result, nil
 }
 
-// GetFileMetadata 获取文件元数据
-/*
-  指引地址：https://docs.qq.com/open/document/app/openapi/v2/file/files/metadata.html
-*/
+// GetFileMetadata 获取腾讯文档文件的元数据信息。
+//
+// fileID 是要获取元数据的文件ID，必填参数。
+//
+// 返回文件的元数据信息，包括：
+//   - 文件基本信息（ID、名称、类型等）
+//   - 创建和修改时间
+//   - 所有者信息
+//   - 文件大小
+//   - 其他元数据属性
+//
+// 如果发生错误，可能的错误类型包括：
+//   - access token未设置
+//   - 文件ID无效
+//   - API调用失败
+//   - 服务端返回错误
+//
+// API参考：https://docs.qq.com/open/document/app/openapi/v2/file/files/metadata.html
 func (c *Client) GetFileMetadata(ctx context.Context, fileID string) (*model.FileMetadataResponse, error) {
 	if c.token == nil || c.token.AccessToken == "" {
 		return nil, fmt.Errorf("access token is required")
