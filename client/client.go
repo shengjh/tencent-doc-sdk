@@ -32,14 +32,8 @@ type Client struct {
 	token      *model.Token
 }
 
-// NewClient 创建新的腾讯文档客户端
-/*
-func NewClient(cfg *config.Config) *Client {
-	return &Client{
-		config:     cfg,
-		httpClient: &http.Client{Timeout: cfg.Timeout},
-	}
-}*/
+// 确保 Client 实现 TencentDocClient 接口
+var _ TencentDocClient = (*Client)(nil)
 
 // WithToken 设置访问令牌
 func (c *Client) WithToken(token *model.Token) *Client {

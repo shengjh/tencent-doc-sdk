@@ -138,6 +138,25 @@ docClient.WithHTTPClient(customHTTPClient)
 3. 建议在生产环境中使用自定义的 HTTP 客户端配置
 4. 错误处理建议使用 type assertion 来处理不同类型的错误
 
+## 接口实现
+
+本SDK已完整实现以下核心接口功能：
+
+### 认证授权接口
+- `GetAuthURL() string` - 获取授权URL
+- `ExchangeToken(ctx context.Context, code string)` - 通过授权码交换Token
+- `RefreshToken(ctx context.Context, refreshToken string)` - 刷新Access Token
+
+### 文档操作接口
+- `ListDocuments(ctx context.Context, params *model.ListParams)` - 列出用户文档
+- `SearchDocuments(ctx context.Context, params *model.SearchParams)` - 搜索文档
+- `GetFileMetadata(ctx context.Context, fileID string)` - 获取文件元数据
+
+### 文档导出接口
+- `ExportDocument(ctx context.Context, docID string, req *model.ExportRequest)` - 导出文档
+- `GetExportProgress(ctx context.Context, docID string, operationID string)` - 查询导出进度
+
+
 ## 示例代码
 
 完整的示例代码可以在 [example](./example) 目录下找到。
