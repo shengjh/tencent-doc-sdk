@@ -72,7 +72,21 @@ if err != nil {
 }
 ```
 
-### 3. 文档操作
+### 3. 获取用户信息
+
+```go
+// 获取当前用户信息
+userInfo, err := docClient.GetUserInfo(context.Background())
+if err != nil {
+    log.Fatal(err)
+}
+
+// 使用用户信息
+fmt.Printf("用户昵称: %s\n", userInfo.Nick)
+fmt.Printf("用户头像: %s\n", userInfo.Avatar)
+```
+
+### 4. 文档操作
 
 ```go
 // 列出文档
@@ -94,7 +108,7 @@ if err != nil {
 }
 ```
 
-### 4. 导出功能
+### 5. 导出功能
 
 ```go
 // 获取导出进度
@@ -146,6 +160,9 @@ docClient.WithHTTPClient(customHTTPClient)
 - `GetAuthURL() string` - 获取授权URL
 - `ExchangeToken(ctx context.Context, code string)` - 通过授权码交换Token
 - `RefreshToken(ctx context.Context, refreshToken string)` - 刷新Access Token
+
+### 用户信息接口
+- `GetUserInfo(ctx context.Context) (*model.UserInfo, error)` - 获取当前用户信息
 
 ### 文档操作接口
 - `ListDocuments(ctx context.Context, params *model.ListParams)` - 列出用户文档

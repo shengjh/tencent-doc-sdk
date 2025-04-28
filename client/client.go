@@ -15,6 +15,8 @@ type TencentDocClient interface {
 	ExchangeToken(ctx context.Context, code string) (*model.TokenResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*model.TokenResponse, error)
 
+	// 用户相关
+	GetUserInfo(ctx context.Context) (*model.UserInfo, error)
 	// 文档操作
 	ListDocuments(ctx context.Context, params *model.ListParams) (*model.ListDocumentsResponse, error)
 	SearchDocuments(ctx context.Context, params *model.SearchParams) (*model.SearchDocumentsResponse, error)
