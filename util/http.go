@@ -184,3 +184,50 @@ func PostJSONWithAuth(
 
 	return nil
 }
+
+// HTTPGet 发送HTTP GET请求并将响应解析为JSON。
+//
+// ctx 用于控制请求的上下文，可用于超时控制和取消。
+//
+// url 是请求的完整URL地址。
+//
+// result 是用于存储JSON响应的结构体指针。
+//
+// 返回错误信息，可能的错误包括：
+//   - 创建请求失败
+//   - 发送请求失败
+//   - 读取响应失败
+//   - JSON解析失败
+func HTTPGet(ctx context.Context, url string, result interface{}) error {
+	// 创建带有上下文的请求
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	// 发送请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	// 读取响应体
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	// 检查状态码
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("request failed with status code %d: %s", resp.StatusCode, string(body))
+	}
+
+	// 解析JSON响应
+	if err := json.Unmarshal(body, result); err != nil {
+		return fmt.Errorf("failed to parse JSON response: %w", err)
+	}
+
+	return nil
+}

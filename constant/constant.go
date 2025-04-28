@@ -7,6 +7,8 @@ const (
 	TokenEndpoint = "https://docs.qq.com/oauth/v2/token"
 	// APIEndpoint API端点
 	APIEndpoint = "https://docs.qq.com/openapi"
+	// UserInfoEndpoint API端点
+	UserInfoEndpoint = "https://docs.qq.com/oauth/v2/userinfo"
 	// AllScope 全部权限
 	AllScope = "all"
 )
