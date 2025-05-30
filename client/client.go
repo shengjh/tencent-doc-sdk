@@ -50,8 +50,22 @@ func NewClient(opts ...config.Option) *Client {
 		opt(cfg)
 	}
 
-	return &Client{
-		config:     cfg,
-		httpClient: &http.Client{Timeout: cfg.Timeout},
+	httpClient := &http.Client{Timeout: cfg.Timeout}
+
+	// 如果配置了自定义 Transport，则使用它
+	if cfg.Transport != nil {
+		httpClient.Transport = cfg.Transport
 	}
+
+	client := &Client{
+		config:     cfg,
+		httpClient: httpClient,
+	}
+
+	// 如果提供了初始 Token，则设置它
+	if cfg.InitialToken != nil {
+		client.token = cfg.InitialToken
+	}
+
+	return client
 }
