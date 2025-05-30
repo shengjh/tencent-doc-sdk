@@ -2,6 +2,7 @@
 package config
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/chinahtl/tencent-doc-sdk/model"
@@ -14,7 +15,8 @@ type Config struct {
 	RedirectURI  string
 	RandomState  string
 	Timeout      time.Duration
-	InitialToken *model.Token // 新增初始 Token 字段
+	InitialToken *model.Token      // 新增初始 Token 字段
+	Transport    http.RoundTripper // 自定义 HTTP Transport
 }
 
 // Option 定义配置选项函数类型
@@ -66,5 +68,12 @@ func WithRandomState(randomState string) Option {
 func WithInitialToken(token *model.Token) Option {
 	return func(c *Config) {
 		c.InitialToken = token
+	}
+}
+
+// WithHttpTransport 设置自定义的 HTTP Transport
+func WithHttpTransport(transport http.RoundTripper) Option {
+	return func(c *Config) {
+		c.Transport = transport
 	}
 }
