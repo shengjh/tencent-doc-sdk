@@ -93,20 +93,32 @@ func getFileName(resp *http.Response) (string, error) {
 		return "", fmt.Errorf("解析Content-Disposition失败: %w", err)
 	}
 
+	var fileName string
+
 	// 优先使用UTF-8编码的文件名
 	if name := params["filename*"]; name != "" {
 		if strings.Contains(name, "''") {
 			parts := strings.SplitN(name, "''", 2)
 			if decoded, err := url.QueryUnescape(parts[1]); err == nil {
-				return decoded, nil
+				fileName = decoded
 			}
 		}
 	}
 
 	// 使用普通文件名
-	if name := params["filename"]; name != "" {
-		return strings.Trim(name, `"`), nil
+	if fileName == "" {
+		if name := params["filename"]; name != "" {
+			fileName = strings.Trim(name, `"`)
+		}
 	}
 
-	return "", fmt.Errorf("无法从响应头中提取文件名")
+	if fileName == "" {
+		return "", fmt.Errorf("无法从响应头中提取文件名")
+	}
+
+	// 替换文件名中的路径分隔符，防止创建文件时出错
+	fileName = strings.ReplaceAll(fileName, "/", "_")
+	fileName = strings.ReplaceAll(fileName, "\\", "_")
+
+	return fileName, nil
 }
